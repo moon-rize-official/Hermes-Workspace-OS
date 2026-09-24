@@ -1,3 +1,10 @@
+> **SUPERSEDED / ARCHIVING (2026-09-24)**  
+> This repository is superseded. Active Agent OS work continues in:  
+> - Private control plane: https://github.com/moon-rize-official/agent-os (Moon Rize Nexus)  
+> - Public research/specs: https://github.com/moon-rize-official/open-agent-os  
+> Hermes Bridge / AI-OS coordination lives with the Moon Rize Hermes plane, not this pre-implementation docs tree.  
+> Do not start new work here. This repo is being archived as historical reference only.
+
 # Hermes Workspace OS
 
 > An open-source, self-hostable **AI Workspace Operating System** that unifies project
