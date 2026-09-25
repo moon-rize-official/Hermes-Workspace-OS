@@ -17,12 +17,30 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-      - name: 'Qodana Scan'
+          ref: ${{ github.event.pull_request.head.sha }} # analyze the PR head, not its merge commit
+          fetch-depth: 0
+      - name: Detect Qodana Cloud token
+        id: qodana-auth
+        shell: bash
+        run: |
+          if [[ -n "${QODANA_TOKEN:-}" ]]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1848307783 }}
+      - name: Qodana Scan (Cloud)
+        if: steps.qodana-auth.outputs.present == 'true'
         uses: JetBrains/qodana-action@v2026.1
         with:
           pr-mode: false
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1848307783 }}
-          QODANA_ENDPOINT: 'https://qodana.cloud'
+          QODANA_ENDPOINT: https://qodana.cloud
+      - name: Qodana Scan (Community fallback)
+        if: steps.qodana-auth.outputs.present != 'true'
+        uses: JetBrains/qodana-action@v2026.1
+        with:
+          args: --linter qodana-jvm-community
+          pr-mode: false
